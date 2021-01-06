@@ -16,14 +16,14 @@ TEST(Stub_tests, test_initialisation)
   ASSERT_EQ(status, Temperature_sensor::status::ok);
 }
 
-TEST(Stub_tests, test_basic_algorithm)
-{
-  Sensor::Ds1820 sensor{};
-  Display::Lcd   display{};
+// TEST(Stub_tests, test_basic_algorithm)
+// {
+//   Sensor::Ds1820 sensor{};
+//   Display::Lcd   display{};
 
-  Temperature_sensor test_obj{ display, sensor };
+//   Temperature_sensor test_obj{ display, sensor };
 
-  test_obj.initialize();
-  auto status = test_obj.run();
-  ASSERT_EQ(status, Temperature_sensor::status::ok);
-}
+//   test_obj.initialize();
+//   auto status = test_obj.run();
+//   ASSERT_EQ(status, Temperature_sensor::status::ok);
+// }

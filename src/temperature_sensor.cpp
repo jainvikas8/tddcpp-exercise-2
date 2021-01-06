@@ -24,56 +24,56 @@ Temperature_sensor::Temperature_sensor(IDisplay& IDisplay_, Ds1820& sensor_) :
 // out ROM's Family Code and Serial number values
 Temperature_sensor::status Temperature_sensor::initialize()
 {
-  const ROM_t   rom_data = sensor->read_rom();
-  const uint8_t crc =
-    sensor->calculate_CRC(reinterpret_cast<const uint8_t*>(&rom_data), 7);
+  // const ROM_t   rom_data = sensor->read_rom();
+  // const uint8_t crc =
+  //   sensor->calculate_CRC(reinterpret_cast<const uint8_t*>(&rom_data), 7);
 
-  if (rom_data.rom_code.crc != crc) {
-    return status::sensor_failure;
-  }
+  // if (rom_data.rom_code.crc != crc) {
+  //   return status::sensor_failure;
+  // }
 
-  if (rom_data.rom_code.family_code != 0x28) {
-    return status::sensor_failure;
-  }
+  // if (rom_data.rom_code.family_code != 0x28) {
+  //   return status::sensor_failure;
+  // }
 
-  strstream family_code{}; // dynamic buffer
-  family_code << "Family code: 0x" << hex
-              << static_cast<uint32_t>(rom_data.rom_code.family_code) << ends;
+  // strstream family_code{}; // dynamic buffer
+  // family_code << "Family code: 0x" << hex
+  //             << static_cast<uint32_t>(rom_data.rom_code.family_code) << ends;
 
-  int count = display->display(family_code.str());
-  if (count == -1) {
-    // display display error
-    return status::display_failure;
-  }
+  // int count = display->display(family_code.str());
+  // if (count == -1) {
+  //   // display display error
+  //   return status::display_failure;
+  // }
 
-  strstream serial_number{}; // dynamic buffer
-  serial_number << "Serial Number: ";
-  serial_number << hex;
-  serial_number << setfill('0') << setw(2)
-                << static_cast<uint32_t>(rom_data.rom_code.serial_number[5]);
-  serial_number << ":";
-  serial_number << setfill('0') << setw(2)
-                << static_cast<uint32_t>(rom_data.rom_code.serial_number[4]);
-  serial_number << ":";
-  serial_number << setfill('0') << setw(2)
-                << static_cast<uint32_t>(rom_data.rom_code.serial_number[3]);
-  serial_number << ":";
-  serial_number << setfill('0') << setw(2)
-                << static_cast<uint32_t>(rom_data.rom_code.serial_number[2]);
-  serial_number << ":";
-  serial_number << setfill('0') << setw(2)
-                << static_cast<uint32_t>(rom_data.rom_code.serial_number[1]);
-  serial_number << ":";
-  serial_number << setfill('0') << setw(2)
-                << static_cast<uint32_t>(rom_data.rom_code.serial_number[0]);
-  serial_number << ends;
+  // strstream serial_number{}; // dynamic buffer
+  // serial_number << "Serial Number: ";
+  // serial_number << hex;
+  // serial_number << setfill('0') << setw(2)
+  //               << static_cast<uint32_t>(rom_data.rom_code.serial_number[5]);
+  // serial_number << ":";
+  // serial_number << setfill('0') << setw(2)
+  //               << static_cast<uint32_t>(rom_data.rom_code.serial_number[4]);
+  // serial_number << ":";
+  // serial_number << setfill('0') << setw(2)
+  //               << static_cast<uint32_t>(rom_data.rom_code.serial_number[3]);
+  // serial_number << ":";
+  // serial_number << setfill('0') << setw(2)
+  //               << static_cast<uint32_t>(rom_data.rom_code.serial_number[2]);
+  // serial_number << ":";
+  // serial_number << setfill('0') << setw(2)
+  //               << static_cast<uint32_t>(rom_data.rom_code.serial_number[1]);
+  // serial_number << ":";
+  // serial_number << setfill('0') << setw(2)
+  //               << static_cast<uint32_t>(rom_data.rom_code.serial_number[0]);
+  // serial_number << ends;
 
-  count = display->display(serial_number.str());
+  // count = display->display(serial_number.str());
 
-  if (count == -1) {
-    // display display error
-    return status::display_failure;
-  }
+  // if (count == -1) {
+  //   // display display error
+  //   return status::display_failure;
+  // }
   return status::ok;
 }
 
@@ -85,37 +85,37 @@ Temperature_sensor::status Temperature_sensor::initialize()
 // f.  Call display display to print C-string value
 Temperature_sensor::status Temperature_sensor::run()
 {
-  sensor->do_conversion();
-  scratchpad_data_t scratchpad{};
+  // sensor->do_conversion();
+  // scratchpad_data_t scratchpad{};
 
-  const bool okay = sensor->read_scratchpad(&scratchpad);
-  if (!okay) {
-    return status::sensor_failure;
-  }
+  // const bool okay = sensor->read_scratchpad(&scratchpad);
+  // if (!okay) {
+  //   return status::sensor_failure;
+  // }
 
-  const uint8_t crc = sensor->calculate_CRC(
-    reinterpret_cast<const uint8_t*>(&scratchpad), sizeof(scratchpad) - 1);
+  // const uint8_t crc = sensor->calculate_CRC(
+  //   reinterpret_cast<const uint8_t*>(&scratchpad), sizeof(scratchpad) - 1);
 
-  if (scratchpad.crc != crc) {
-    return status::sensor_failure;
-  }
+  // if (scratchpad.crc != crc) {
+  //   return status::sensor_failure;
+  // }
 
-  const uint16_t raw_sensor_temp = ((scratchpad.msb << 8) | scratchpad.lsb);
+  // const uint16_t raw_sensor_temp = ((scratchpad.msb << 8) | scratchpad.lsb);
 
-  const float deg_C = sensor->convert(raw_sensor_temp);
-  if ((deg_C < -55.0f) || (deg_C > 125.0f)) {
-    // Out of range error
-    return status::sensor_failure;
-  }
+  // const float deg_C = sensor->convert(raw_sensor_temp);
+  // if ((deg_C < -55.0f) || (deg_C > 125.0f)) {
+  //   // Out of range error
+  //   return status::sensor_failure;
+  // }
 
-  char buff[20] = {};
-  sprintf(buff, "%02.2fC", deg_C);
+  // char buff[20] = {};
+  // sprintf(buff, "%02.2fC", deg_C);
 
-  const int count = display->display(buff);
+  // const int count = display->display(buff);
 
-  if (count == -1) {
-    // display display error
-    return status::display_failure;
-  }
+  // if (count == -1) {
+  //   // display display error
+  //   return status::display_failure;
+  // }
   return status::ok;
 }
